@@ -1,0 +1,21 @@
+# Keep this fork's master in step with Ty Hedrick's tlhedrick/dltdv, once a day and on demand.
+# Lab PCs and the GaitCoder stride board use a TAGGED version (e.g. v8.5.0-lab), not master:
+# move the tag only after the new version passes the lab-PC check.
+name: Sync from upstream
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # daily, 09:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge upstream master into this fork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=master
